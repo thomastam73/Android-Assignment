@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.example.assignment.Register;
+import com.example.assignment.MainActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class Login extends AppCompatActivity {
@@ -31,6 +31,10 @@ public class Login extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(Login.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
             }
         });
 

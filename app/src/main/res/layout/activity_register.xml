@@ -55,6 +55,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ems="10"
+                    android:hint="password"
                     android:inputType="textPassword" />
 
             </TableRow>
@@ -71,9 +72,10 @@
 
                 <EditText
                     android:id="@+id/register_edit_repeat_password"
-                    android:layout_width="wrap_content"
+                    android:layout_width="299dp"
                     android:layout_height="wrap_content"
                     android:ems="10"
+                    android:hint="repeat password"
                     android:inputType="textPassword" />
 
             </TableRow>
