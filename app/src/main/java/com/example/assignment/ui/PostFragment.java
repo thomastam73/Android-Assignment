@@ -1,4 +1,4 @@
-package com.example.assignment.ui.post;
+package com.example.assignment.ui;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,20 +16,12 @@ import com.example.assignment.R;
 
 public class PostFragment extends Fragment {
 
-    private PostViewModel postViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        postViewModel =
-                new ViewModelProvider(this).get(PostViewModel.class);
+
         View root = inflater.inflate(R.layout.fragment_post, container, false);
-        final TextView textView = root.findViewById(R.id.text_post);
-        postViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+
         return root;
     }
 }

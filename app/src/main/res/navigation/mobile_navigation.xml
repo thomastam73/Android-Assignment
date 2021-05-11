@@ -7,26 +7,30 @@
 
     <fragment
         android:id="@+id/navigation_post"
-        android:name="com.example.assignment.ui.post.PostFragment"
+        android:name="com.example.assignment.ui.PostFragment"
         tools:layout="@layout/fragment_post" />
 
     <fragment
         android:id="@+id/navigation_map"
-        android:name="com.example.assignment.ui.map.MapFragment"
+        android:name="com.example.assignment.ui.MapFragment"
         tools:layout="@layout/fragment_map" />
     <fragment
         android:id="@+id/navigation_add"
-        android:name="com.example.assignment.ui.add.AddFragment"
-        tools:layout="@layout/fragment_add" />
+        android:name="com.example.assignment.ui.AddFragment"
+        tools:layout="@layout/fragment_add" >
+        <action
+            android:id="@+id/action_navigation_add_to_navigation_post"
+            app:destination="@id/navigation_post" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_notifications"
-        android:name="com.example.assignment.ui.notifications.NotificationsFragment"
+        android:name="com.example.assignment.ui.NotificationsFragment"
         tools:layout="@layout/fragment_notifications" />
 
     <fragment
         android:id="@+id/navigation_profile"
-        android:name="com.example.assignment.ui.profile.ProfileFragment"
+        android:name="com.example.assignment.ui.ProfileFragment"
         tools:layout="@layout/fragment_profile" />
 
 </navigation>
