@@ -101,9 +101,9 @@ public class AddFragment extends Fragment {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                StorageReference PostImages = FirebaseStorage.getInstance().getReference().child("PostImage");
-                StorageReference PostCover = FirebaseStorage.getInstance().getReference().child("PostCover");
-                DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("Posts").child(title.getText().toString());
+                StorageReference PostImages = FirebaseStorage.getInstance().getReference().child("PostImage").child(title.getText().toString());
+                StorageReference PostCover = FirebaseStorage.getInstance().getReference().child("PostCover").child(title.getText().toString());
+                DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("Posts").child(userID).child(title.getText().toString());
                 db.setValue(new AddPostCol(title.getText().toString(), address.getText().toString(), description.getText().toString(), userID, currentDate));
                 StorageReference coverName = PostCover.child("Cover" + coverUri.getLastPathSegment());
                 coverName.putFile(coverUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {

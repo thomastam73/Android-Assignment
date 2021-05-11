@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -18,12 +19,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.util.HashMap;
+import java.util.Objects;
 
 public class Register extends AppCompatActivity {
 
@@ -32,6 +40,7 @@ public class Register extends AppCompatActivity {
     ImageButton icon;
     EditText email, password, repeatPassword;
     FirebaseAuth mAuth;
+    Uri iconUri;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,7 +60,7 @@ public class Register extends AppCompatActivity {
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 intent.setType("image/*");
-                startActivityForResult(intent, PICK_IMAGE);
+                startActivityForResult(intent, 1);
             }
         });
 
@@ -62,7 +71,21 @@ public class Register extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            db.child(mAuth.getUid()).setValue(new AddUserCol(asd,mAuth.getUid(), "", email.getText().toString(), "", 0, 0, 0));
+                            db.child(mAuth.getUid()).setValue(new AddUserCol(mAuth.getUid(), "", email.getText().toString(), "", 0, 0, 0));
+                            StorageReference UserIcon = FirebaseStorage.getInstance().getReference().child("Icon").child(mAuth.getUid());
+                            StorageReference coverName = UserIcon.child("IconImage" + iconUri.getLastPathSegment());
+                            coverName.putFile(iconUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                    coverName.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                        @Override
+                                        public void onSuccess(Uri uri) {
+                                            String url = String.valueOf(uri);
+                                            IconSaveToDB(url, db);
+                                        }
+                                    });
+                                }
+                            });
                             Intent intent = new Intent();
                             intent.setClass(Register.this, Login.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -75,5 +98,22 @@ public class Register extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    private void IconSaveToDB(String url, DatabaseReference db) {
+        HashMap<String, String> hashMap1 = new HashMap<>();
+        hashMap1.put("coverImage", url);
+        db.child(mAuth.getUid()).child("Icon").push().setValue(hashMap1);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode==1){
+            if (resultCode == RESULT_OK) {
+                iconUri = Objects.requireNonNull(data).getData();
+                icon.setImageURI(iconUri);
+            }
+        }
     }
 }

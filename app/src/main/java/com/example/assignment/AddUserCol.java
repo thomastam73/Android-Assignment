@@ -7,17 +7,15 @@ public class AddUserCol {
     private String name;
     private String email;
     private String description;
-    private Uri icon;
     private int age;
     private int follower;
     private int following;
 
-    public AddUserCol(String id, String name, String email, String description, Uri icon, int age, int follower, int following) {
+    public AddUserCol(String id, String name, String email, String description, int age, int follower, int following) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.description = description;
-        this.icon = icon;
         this.age = age;
         this.follower = follower;
         this.following = following;
