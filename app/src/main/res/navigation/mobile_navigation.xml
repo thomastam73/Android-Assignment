@@ -7,16 +7,16 @@
 
     <fragment
         android:id="@+id/navigation_post"
-        android:name="com.example.assignment.ui.PostFragment"
+        android:name="com.example.assignment.fragment.PostFragment"
         tools:layout="@layout/fragment_post" />
 
     <fragment
         android:id="@+id/navigation_map"
-        android:name="com.example.assignment.ui.MapFragment"
+        android:name="com.example.assignment.fragment.MapFragment"
         tools:layout="@layout/fragment_map" />
     <fragment
         android:id="@+id/navigation_add"
-        android:name="com.example.assignment.ui.AddFragment"
+        android:name="com.example.assignment.fragment.AddFragment"
         tools:layout="@layout/fragment_add" >
         <action
             android:id="@+id/action_navigation_add_to_navigation_post"
@@ -25,12 +25,12 @@
 
     <fragment
         android:id="@+id/navigation_notifications"
-        android:name="com.example.assignment.ui.NotificationsFragment"
+        android:name="com.example.assignment.fragment.NotificationsFragment"
         tools:layout="@layout/fragment_notifications" />
 
     <fragment
         android:id="@+id/navigation_profile"
-        android:name="com.example.assignment.ui.ProfileFragment"
+        android:name="com.example.assignment.fragment.ProfileFragment"
         tools:layout="@layout/fragment_profile" />
 
 </navigation>

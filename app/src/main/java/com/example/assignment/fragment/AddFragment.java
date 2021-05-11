@@ -1,4 +1,4 @@
-package com.example.assignment.ui;
+package com.example.assignment.fragment;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -21,7 +21,7 @@ import androidx.navigation.Navigation;
 import com.example.assignment.DisplayToast;
 import com.example.assignment.LoginSession;
 import com.example.assignment.R;
-import com.example.assignment.AddPostCol;
+import com.example.assignment.model.Post;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -103,8 +103,8 @@ public class AddFragment extends Fragment {
             public void onClick(View v) {
                 StorageReference PostImages = FirebaseStorage.getInstance().getReference().child("PostImage").child(title.getText().toString());
                 StorageReference PostCover = FirebaseStorage.getInstance().getReference().child("PostCover").child(title.getText().toString());
-                DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("Posts").child(userID).child(title.getText().toString());
-                db.setValue(new AddPostCol(title.getText().toString(), address.getText().toString(), description.getText().toString(), userID, currentDate));
+                DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("Posts").child(title.getText().toString());
+                db.setValue(new Post(title.getText().toString(), address.getText().toString(), description.getText().toString(), userID, currentDate));
                 StorageReference coverName = PostCover.child("Cover" + coverUri.getLastPathSegment());
                 coverName.putFile(coverUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -144,13 +144,11 @@ public class AddFragment extends Fragment {
     private void ImageSaveToDB(String url, DatabaseReference db) {
         HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("postImage", url);
-        db.child("Images").push().setValue(hashMap);
+        db.child("images").push().setValue(hashMap);
     }
 
     private void CoverSaveToDB(String url, DatabaseReference db) {
-        HashMap<String, String> hashMap1 = new HashMap<>();
-        hashMap1.put("coverImage", url);
-        db.child("Cover").push().setValue(hashMap1);
+        db.child("cover").setValue(url);
     }
 
     @Override

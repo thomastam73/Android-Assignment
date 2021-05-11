@@ -1,20 +1,32 @@
-package com.example.assignment;
+package com.example.assignment.model;
 
-import java.util.Date;
+import android.net.Uri;
 
-public class AddPostCol {
+public class Post {
     private String title;
     private String address;
     private String description;
     private String author;
     private String postDate;
+    private String cover;
 
 
 
 
-    public AddPostCol() {
+    public Post() {
     }
-    public AddPostCol(String title, String address, String description, String author, String postDate) {
+
+
+    public Post(String title, String address, String description, String author, String postDate, String cover) {
+        this.title = title;
+        this.address = address;
+        this.description = description;
+        this.author = author;
+        this.postDate = postDate;
+        this.cover = cover;
+    }
+
+    public Post(String title, String address, String description, String author, String postDate) {
         this.title = title;
         this.address = address;
         this.description = description;
@@ -22,6 +34,14 @@ public class AddPostCol {
         this.postDate = postDate;
     }
 
+
+    public String getCover() {
+        return cover;
+    }
+
+    public void setCover(String cover) {
+        this.cover = cover;
+    }
     public String getPostDate() {
         return postDate;
     }
