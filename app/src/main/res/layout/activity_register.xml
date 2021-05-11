@@ -5,84 +5,94 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Register">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/login_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Enter your register email and password:" />
 
         <TableLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/login_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Register"
+                android:textSize="30dp"
+              />
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent"
+                android:gravity="center" >
 
-                <TextView
-                    android:id="@+id/register_email"
+                <ImageButton
+                    android:id="@+id/register_icon"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Email:" />
+                    android:layout_height="89dp"
+                    android:background="@color/common_google_signin_btn_text_dark_disabled"
+                    android:tint="@color/common_google_signin_btn_tint"
+                    app:srcCompat="@drawable/ic_baseline_account_circle_24" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center">
+
 
                 <EditText
                     android:id="@+id/register_edit_email"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="email"
+                    android:ems="20"
+                    android:hint="Email"
                     android:inputType="textEmailAddress" />
 
             </TableRow>
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent"
+                android:gravity="center">
 
-                <TextView
-                    android:id="@+id/register_password"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Password:" />
 
                 <EditText
                     android:id="@+id/register_edit_password"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="password"
+                    android:ems="20"
+                    android:hint="Password"
                     android:inputType="textPassword" />
 
             </TableRow>
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent"
+                android:gravity="center">
 
-                <TextView
-                    android:id="@+id/register_repeat_password"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Repeat Password:" />
+
 
                 <EditText
                     android:id="@+id/register_edit_repeat_password"
                     android:layout_width="299dp"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:hint="repeat password"
+                    android:hint="Repeat Password"
                     android:inputType="textPassword" />
 
             </TableRow>
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent"
+                android:gravity="center">
 
                 <Button
                     android:id="@+id/register_submit"
@@ -93,9 +103,6 @@
 
             </TableRow>
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
         </TableLayout>
 
     </LinearLayout>
