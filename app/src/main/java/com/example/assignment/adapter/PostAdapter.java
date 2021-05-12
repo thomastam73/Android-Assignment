@@ -52,7 +52,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     }
 
 
-
     @Override
     public int getItemCount() {
         return postList.size();
@@ -62,6 +61,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
         public ImageView cover, user_icon;
         public TextView username, title, postDate;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             username = itemView.findViewById(R.id.user_name);
@@ -85,8 +85,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             public void onClick(View v) {
                 final NavController navController = Navigation.findNavController(v);
                 Bundle bundle = new Bundle();
-                bundle.putString("postTitle",post.getTitle());
-                navController.navigate(R.id.action_navigation_post_to_navigation_detailPost,bundle);
+                bundle.putString("postTitle", post.getTitle());
+                navController.navigate(R.id.action_navigation_post_to_navigation_detailPost, bundle);
             }
         });
     }
@@ -98,6 +98,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User user = snapshot.getValue(User.class);
                 Glide.with(context).load(user.getIcon()).into(user_icon);
+                user_icon.getLayoutParams().width = 100;
+                user_icon.getLayoutParams().height = 100;
                 username.setText(user.getName());
             }
 

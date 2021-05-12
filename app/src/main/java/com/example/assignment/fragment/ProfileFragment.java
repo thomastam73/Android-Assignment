@@ -41,11 +41,10 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         final NavController navController = Navigation.findNavController(view);
-
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                navController.navigate(R.id.action_navigation_post_to_navigation_detailPost);
+                navController.navigate(R.id.action_navigation_profile_to_navigation_editProfile);
             }
         });
 

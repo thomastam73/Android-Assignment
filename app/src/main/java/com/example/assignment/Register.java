@@ -96,9 +96,7 @@ public class Register extends AppCompatActivity {
     }
 
     private void IconSaveToDB(String url, DatabaseReference db) {
-        HashMap<String, String> hashMap1 = new HashMap<>();
-        hashMap1.put("coverImage", url);
-        db.child(mAuth.getUid()).child("Icon").push().setValue(hashMap1);
+        db.child(mAuth.getUid()).child("icon").setValue(url);
     }
 
     @Override
