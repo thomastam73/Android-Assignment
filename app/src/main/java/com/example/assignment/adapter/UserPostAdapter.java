@@ -34,12 +34,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
+public class UserPostAdapter extends RecyclerView.Adapter<UserPostAdapter.ViewHolder> {
     public Context context;
     public List<Post> postList;
     StorageReference firebaseStorage, pick_image;
 
-    public PostAdapter(Context context, List<Post> postList) {
+    public UserPostAdapter(Context context, List<Post> postList) {
         this.context = context;
         this.postList = postList;
     }
