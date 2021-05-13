@@ -3,9 +3,14 @@ package com.example.assignment;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -24,14 +29,19 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.util.Objects;
 
 public class Register extends AppCompatActivity {
 
-    Activity context = this;
+    private static final int PERMISSION_FILE = 3;
+    private static final int ACCESS_FILE = 4;
+    Context context = this;
+    Activity activity = this;
     Button submit;
-    ImageView icon;
+    de.hdodenhof.circleimageview.CircleImageView icon;
     EditText email, password, repeatPassword;
     FirebaseAuth mAuth;
     Uri iconUri;
@@ -52,23 +62,27 @@ public class Register extends AppCompatActivity {
         icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                intent.setType("image/*");
-                startActivityForResult(intent, 1);
+                if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_FILE);
+                } else {
+                    Intent intent = new Intent();
+                    intent.setType("image/*");
+                    intent.setAction(Intent.ACTION_PICK);
+                    startActivityForResult(Intent.createChooser(intent, "image pick"), ACCESS_FILE);
+                }
             }
         });
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAuth.createUserWithEmailAndPassword(email.getText().toString(), password.getText().toString()).addOnCompleteListener(context, new OnCompleteListener<AuthResult>() {
+                mAuth.createUserWithEmailAndPassword(email.getText().toString(), password.getText().toString()).addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             db.child(mAuth.getUid()).setValue(new User(mAuth.getUid(), "", "", email.getText().toString(), "", 0, 0, 0));
                             StorageReference UserIcon = FirebaseStorage.getInstance().getReference().child("Icon").child(mAuth.getUid());
-                            if (coverName != null) {
+                            if (iconUri != null) {
                                 coverName = UserIcon.child("IconImage" + iconUri.getLastPathSegment());
                                 coverName.putFile(iconUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                     @Override
@@ -104,10 +118,27 @@ public class Register extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1) {
-            if (resultCode == RESULT_OK) {
-                iconUri = Objects.requireNonNull(data).getData();
-                icon.setImageURI(iconUri);
+
+        if (requestCode == ACCESS_FILE && resultCode == RESULT_OK && data != null & data.getData() != null){
+            Uri uri = data.getData();
+            CropImage.activity(uri)
+                    .setGuidelines(CropImageView.Guidelines.ON)
+                    .setCropShape(CropImageView.CropShape.OVAL)
+                    .setActivityTitle("Crop Image")
+                    .setFixAspectRatio(true)
+                    .setCropMenuCropButtonTitle("Done")
+                    .start(activity);
+        }
+
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK){
+                Uri uri = result.getUri();
+                iconUri = uri;
+                icon.setImageURI(uri);
+            }else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE){
+                Exception error = result.getError();
+                DisplayToast.displayToast(error.getMessage(),context);
             }
         }
     }

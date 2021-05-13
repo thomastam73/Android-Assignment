@@ -26,7 +26,7 @@
                 android:layout_height="160dp"
                 android:padding="20dp">
 
-                <ImageView
+                <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/profile_icon"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
@@ -51,7 +51,7 @@
                     android:layout_toRightOf="@id/userName"
                     android:background="@drawable/btn_like_style"
                     android:text="Logout"
-                    app:backgroundTint="@color/white" />
+                    app:backgroundTint="@color/gold" />
 
             </RelativeLayout>
 
@@ -67,7 +67,7 @@
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/btn_like_style"
                     android:text="EditProfile"
-                    app:backgroundTint="@color/white" />
+                    app:backgroundTint="@color/gold" />
 
             </RelativeLayout>
 
@@ -78,6 +78,7 @@
                 android:background="?android:attr/listDivider" />
 
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/ownPostList"
                 android:layout_width="match_parent"
                 android:layout_height="435dp" />
 

@@ -6,20 +6,21 @@
     android:layout_height="350dp">
 
     <TextView
-        android:id="@+id/post_title"
+        android:id="@+id/own_post_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="52dp"
+        android:fontFamily="cursive"
         android:text="Title"
         android:textSize="28sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/post_cover" />
+        app:layout_constraintTop_toBottomOf="@+id/own_post_cover" />
 
     <ImageButton
-        android:id="@+id/post_cover"
+        android:id="@+id/own_post_cover"
         android:layout_width="match_parent"
         android:layout_height="250dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -33,11 +34,11 @@
         android:id="@+id/imageView2"
         android:layout_width="410dp"
         android:layout_height="113dp"
-        app:layout_constraintBottom_toBottomOf="@+id/post_cover"
-        app:layout_constraintEnd_toEndOf="@+id/post_cover"
+        app:layout_constraintBottom_toBottomOf="@+id/own_post_cover"
+        app:layout_constraintEnd_toEndOf="@+id/own_post_cover"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/post_cover"
-        app:layout_constraintTop_toTopOf="@+id/post_cover"
+        app:layout_constraintStart_toStartOf="@+id/own_post_cover"
+        app:layout_constraintTop_toTopOf="@+id/own_post_cover"
         app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/black_gradient" />
 
@@ -61,12 +62,15 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="0dp">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/user_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
             android:layout_marginLeft="10dp"
-            app:srcCompat="@drawable/ic_baseline_account_circle_24" />
+            app:civ_border_color="@color/gold"
+            app:civ_border_width="2dp"
+            app:civ_circle_background_color="@color/white"
+            tools:src="@drawable/ic_baseline_account_circle_24" />
 
         <TextView
             android:id="@+id/user_name"
@@ -74,14 +78,16 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
             android:layout_toRightOf="@id/user_icon"
+            android:fontFamily="serif"
             android:text="Name" />
 
         <TextView
-            android:id="@+id/post_date"
+            android:id="@+id/own_post_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="300dp"
             android:layout_marginLeft="300dp"
+            android:fontFamily="serif"
             android:text="Date" />
 
 

@@ -1,9 +1,7 @@
 package com.example.assignment.adapter;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,28 +14,20 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.assignment.DisplayToast;
 import com.example.assignment.model.Post;
 import com.example.assignment.model.User;
 import com.example.assignment.R;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FileDownloadTask;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     public Context context;
     public List<Post> postList;
-    StorageReference firebaseStorage, pick_image;
 
     public PostAdapter(Context context, List<Post> postList) {
         this.context = context;
@@ -66,9 +56,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             super(itemView);
             username = itemView.findViewById(R.id.user_name);
             user_icon = itemView.findViewById(R.id.user_icon);
-            cover = itemView.findViewById(R.id.post_cover);
-            title = itemView.findViewById(R.id.post_title);
-            postDate = itemView.findViewById(R.id.post_date);
+            cover = itemView.findViewById(R.id.own_post_cover);
+            title = itemView.findViewById(R.id.own_post_title);
+            postDate = itemView.findViewById(R.id.own_post_date);
         }
     }
 
