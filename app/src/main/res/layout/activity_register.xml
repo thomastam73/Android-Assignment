@@ -23,21 +23,26 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="Register"
-                android:textSize="30dp"
-              />
+                android:textSize="30dp" />
 
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center" >
+                android:gravity="center">
 
-                <ImageButton
-                    android:id="@+id/register_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="89dp"
-                    android:background="@color/common_google_signin_btn_text_dark_disabled"
-                    android:tint="@color/common_google_signin_btn_tint"
-                    app:srcCompat="@drawable/ic_baseline_account_circle_24" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_horizontal|center_vertical">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/register_icon1"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:src="@drawable/ic_baseline_account_circle_24" />
+
+                </RelativeLayout>
+
             </TableRow>
 
             <TableRow
@@ -76,7 +81,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center">
-
 
 
                 <EditText

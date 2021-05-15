@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.example.assignment.ui.AddFragment;
-
 public class LoginSession {
     private static final String loginStatus = "status_login",
             userID = "UserID",

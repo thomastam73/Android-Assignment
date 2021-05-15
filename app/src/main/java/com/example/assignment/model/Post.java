@@ -1,27 +1,57 @@
-package com.example.assignment;
+package com.example.assignment.model;
 
-import java.util.Date;
+import android.net.Uri;
 
-public class AddPostCol {
+public class Post {
     private String title;
     private String address;
     private String description;
     private String author;
     private String postDate;
+    private String cover;
+    private int like;
 
 
 
-
-    public AddPostCol() {
+    public Post() {
     }
-    public AddPostCol(String title, String address, String description, String author, String postDate) {
+
+
+    public Post(String title, String address, String description, String author, String postDate, String cover) {
         this.title = title;
         this.address = address;
         this.description = description;
         this.author = author;
         this.postDate = postDate;
+        this.cover = cover;
+
     }
 
+    public int getLike() {
+        return like;
+    }
+
+    public void setLike(int like) {
+        this.like = like;
+    }
+
+    public Post(String title, String address, String description, String author, String postDate, int like) {
+        this.title = title;
+        this.address = address;
+        this.description = description;
+        this.author = author;
+        this.postDate = postDate;
+        this.like = like;
+    }
+
+
+    public String getCover() {
+        return cover;
+    }
+
+    public void setCover(String cover) {
+        this.cover = cover;
+    }
     public String getPostDate() {
         return postDate;
     }

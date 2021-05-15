@@ -1,9 +1,10 @@
-package com.example.assignment;
+package com.example.assignment.model;
 
 import android.net.Uri;
 
-public class AddUserCol {
+public class User {
     private String id;
+    private String icon;
     private String name;
     private String email;
     private String description;
@@ -11,14 +12,26 @@ public class AddUserCol {
     private int follower;
     private int following;
 
-    public AddUserCol(String id, String name, String email, String description, int age, int follower, int following) {
+    public User() {
+    }
+
+    public User(String id, String icon, String name, String email, String description, int age, int follower, int following) {
         this.id = id;
+        this.icon = icon;
         this.name = name;
         this.email = email;
         this.description = description;
         this.age = age;
         this.follower = follower;
         this.following = following;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 
     public String getId() {
