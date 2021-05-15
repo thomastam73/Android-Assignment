@@ -22,7 +22,7 @@
                 android:id="@+id/AddPostCover"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:background="@color/material_on_primary_disabled"
+                android:background="@drawable/btn_add_style"
                 android:contentDescription="Cover"
                 android:src="@drawable/ic_baseline_add_24" />
 
@@ -36,8 +36,8 @@
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_gravity="center"
-                    android:background="@color/material_on_primary_disabled"
                     android:contentDescription="Images"
+                    android:background="@drawable/btn_add_style"
                     android:src="@drawable/ic_baseline_add_24"
                     tools:src="@drawable/ic_baseline_add_24" />
 

@@ -1,5 +1,6 @@
 package com.example.assignment.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -55,10 +56,7 @@ public class AddFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-
-        View root = inflater.inflate(R.layout.fragment_add, container, false);
-
-        return root;
+            return inflater.inflate(R.layout.fragment_add, container, false);
     }
 
     @Override
@@ -74,7 +72,7 @@ public class AddFragment extends Fragment {
         String userID = LoginSession.getUserID(getContext());
         Date c = Calendar.getInstance().getTime();
 
-        SimpleDateFormat curFormatter = new SimpleDateFormat("dd/MM/yyyy");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat curFormatter = new SimpleDateFormat("dd/MM/yyyy");
         currentDate = curFormatter.format(c);
 
         cover.setOnClickListener(new View.OnClickListener() {
