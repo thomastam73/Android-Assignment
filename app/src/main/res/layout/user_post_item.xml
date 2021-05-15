@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="350dp">
+    android:layout_height="350dp"
+    android:id="@+id/layoutOfPostItem"
+    >
 
     <TextView
         android:id="@+id/own_post_title"
@@ -24,6 +26,7 @@
         android:id="@+id/own_post_cover"
         android:layout_width="match_parent"
         android:layout_height="250dp"
+        android:background="@drawable/btn_add_style"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

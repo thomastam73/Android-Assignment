@@ -2,8 +2,12 @@ package com.example.assignment;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.biometric.BiometricManager;
+import androidx.biometric.BiometricPrompt;
+import androidx.core.content.ContextCompat;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,6 +27,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.concurrent.Executor;
+
 public class Login extends AppCompatActivity {
     Activity context = this;
     Button submit, register;
@@ -39,6 +45,7 @@ public class Login extends AppCompatActivity {
         password = findViewById(R.id.login_edit_password);
         mAuth = FirebaseAuth.getInstance();
 
+
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,9 +61,9 @@ public class Login extends AppCompatActivity {
                             intent.setClass(Login.this, MainActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                             startActivity(intent);
-                            DisplayToast.displayToast("Hello, " + user.getEmail(),context);
+                            DisplayToast.displayToast("Hello, " + user.getEmail(), context);
                         } else {
-                            DisplayToast.displayToast("Oh, " + task.getException(),context);
+                            DisplayToast.displayToast("Oh, " + task.getException(), context);
                         }
                     }
                 });
@@ -79,10 +86,51 @@ public class Login extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        BiometricManager biometricManager = BiometricManager.from(this);
+        switch (biometricManager.canAuthenticate()) {
+            case BiometricManager.BIOMETRIC_SUCCESS:
+                DisplayToast.displayToast("Have finger print", this);
+                break;
+            case BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE:
+                DisplayToast.displayToast("Sensor not available", this);
+                break;
+            case BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE:
+                DisplayToast.displayToast("No sensor", this);
+                break;
+            case BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED:
+                DisplayToast.displayToast("No finger print", this);
+                break;
+        }
+
+        Executor executor = ContextCompat.getMainExecutor(this);
+        BiometricPrompt biometricPrompt = new BiometricPrompt(Login.this, executor, new BiometricPrompt.AuthenticationCallback() {
+            @Override
+            public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
+                super.onAuthenticationError(errorCode, errString);
+            }
+
+            @Override
+            public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
+                super.onAuthenticationSucceeded(result);
+                startActivity(new Intent(Login.this, MainActivity.class));
+                DisplayToast.displayToast("Hello, " + LoginSession.getUserEmail(context), context);
+                finish();
+            }
+
+            @Override
+            public void onAuthenticationFailed() {
+                super.onAuthenticationFailed();
+            }
+        });
+
+        final BiometricPrompt.PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder()
+                .setTitle("Login")
+                .setDescription("Use finger print to login")
+                .setNegativeButtonText("Cancel")
+                .build();
         if (LoginSession.getDataLogin(this)) {
-            startActivity(new Intent(Login.this, MainActivity.class));
-            DisplayToast.displayToast("Hello, " + LoginSession.getUserEmail(context),context);
-            finish();
+            biometricPrompt.authenticate(promptInfo);
+
         }
     }
 }

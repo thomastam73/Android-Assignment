@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.assignment.LoginSession;
 import com.example.assignment.R;
+import com.example.assignment.adapter.OtherUserPostAdapter;
 import com.example.assignment.adapter.PostAdapter;
 import com.example.assignment.adapter.UserPostAdapter;
 import com.example.assignment.model.Post;
@@ -34,34 +35,23 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProfileFragment extends Fragment {
-    Button logout, edit;
+public class OtherUserProfileFragment extends Fragment {
     de.hdodenhof.circleimageview.CircleImageView profile_icon;
-    TextView profile_name, follower, following;
+    TextView profile_name;
     String userID;
     private RecyclerView recyclerView;
-    private UserPostAdapter postAdapter;
+    private OtherUserPostAdapter otherUserPostAdapter;
     private List<Post> postList;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        View root = inflater.inflate(R.layout.fragment_profile, container, false);
-        logout = root.findViewById(R.id.logout);
-        edit = root.findViewById(R.id.EditProfile);
+        View root = inflater.inflate(R.layout.fragment_other_user_profile, container, false);
         profile_icon = root.findViewById(R.id.profile_icon);
         profile_name = root.findViewById(R.id.userName);
-        follower = root.findViewById(R.id.followerNumber);
-        following = root.findViewById(R.id.followingNumber);
-        userID = LoginSession.getUserID(getContext());
+        userID = getArguments().getString("userID");
         getUserInf();
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LoginSession.clearData(getContext());
-            }
-        });
 
 
         return root;
@@ -78,16 +68,10 @@ public class ProfileFragment extends Fragment {
         linearLayoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(linearLayoutManager);
         postList = new ArrayList<>();
-        postAdapter = new UserPostAdapter(getContext(), postList);
-        recyclerView.setAdapter(postAdapter);
+        otherUserPostAdapter = new OtherUserPostAdapter(getContext(), postList);
+        recyclerView.setAdapter(otherUserPostAdapter);
         readPost();
 
-        edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navController.navigate(R.id.action_navigation_profile_to_navigation_editProfile);
-            }
-        });
     }
 
     public void getUserInf() {
@@ -98,8 +82,6 @@ public class ProfileFragment extends Fragment {
                 try {
                     Glide.with(getView()).load(snapshot.child("icon").getValue()).into(profile_icon);
                     profile_name.setText(snapshot.child("name").getValue().toString());
-                    follower.setText(snapshot.child("follower").getValue().toString());
-                    following.setText(snapshot.child("following").getValue().toString());
                 } catch (Exception e) {
                 }
             }
@@ -120,13 +102,12 @@ public class ProfileFragment extends Fragment {
                     postList.clear();
                     for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                         String postUserID = snapshot1.child("author").getValue().toString();
-                        String userID = LoginSession.getUserID(getContext());
                         if (postUserID.equals(userID)) {
                             Post post = snapshot1.getValue(Post.class);
                             postList.add(post);
                         }
                     }
-                    postAdapter.notifyDataSetChanged();
+                    otherUserPostAdapter.notifyDataSetChanged();
                 } catch (Exception e) {
                 }
 

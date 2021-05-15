@@ -9,7 +9,7 @@ public class Post {
     private String author;
     private String postDate;
     private String cover;
-
+    private int like;
 
 
 
@@ -24,14 +24,24 @@ public class Post {
         this.author = author;
         this.postDate = postDate;
         this.cover = cover;
+
     }
 
-    public Post(String title, String address, String description, String author, String postDate) {
+    public int getLike() {
+        return like;
+    }
+
+    public void setLike(int like) {
+        this.like = like;
+    }
+
+    public Post(String title, String address, String description, String author, String postDate, int like) {
         this.title = title;
         this.address = address;
         this.description = description;
         this.author = author;
         this.postDate = postDate;
+        this.like = like;
     }
 
 

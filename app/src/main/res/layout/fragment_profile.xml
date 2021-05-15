@@ -37,20 +37,62 @@
                     android:id="@+id/userName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="30dp"
+                    android:layout_marginLeft="25dp"
                     android:layout_toRightOf="@id/profile_icon"
                     android:text="name"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/follower"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="40dp"
+                    android:layout_toRightOf="@id/profile_icon"
+                    android:text="Follower"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/followerNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="55dp"
+                    android:layout_marginTop="80dp"
+                    android:layout_toRightOf="@id/profile_icon"
+                    android:text="0"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/following"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="40dp"
+                    android:layout_toRightOf="@id/follower"
+                    android:text="Following"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/followingNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="55dp"
+                    android:layout_marginTop="80dp"
+                    android:layout_toRightOf="@id/follower"
+                    android:text="0"
                     android:textSize="20sp" />
 
                 <Button
                     android:id="@+id/logout"
                     android:layout_width="wrap_content"
                     android:layout_height="38dp"
-                    android:layout_marginLeft="100dp"
-                    android:layout_toRightOf="@id/userName"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginStart="290dp"
+                    android:layout_marginLeft="40dp"
                     android:background="@drawable/btn_like_style"
-                    android:text="Logout"
+                    android:text="Out"
+                    android:textSize="10sp"
                     app:backgroundTint="@color/gold" />
 
             </RelativeLayout>

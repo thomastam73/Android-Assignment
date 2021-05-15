@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -119,7 +120,7 @@ public class Register extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == ACCESS_FILE && resultCode == RESULT_OK && data != null & data.getData() != null){
+        if (requestCode == ACCESS_FILE && resultCode == RESULT_OK && data != null & data.getData() != null) {
             Uri uri = data.getData();
             CropImage.activity(uri)
                     .setGuidelines(CropImageView.Guidelines.ON)
@@ -130,15 +131,16 @@ public class Register extends AppCompatActivity {
                     .start(activity);
         }
 
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if (resultCode == RESULT_OK){
+            if (resultCode == RESULT_OK) {
                 Uri uri = result.getUri();
+                Log.d("uri", uri.toString());
                 iconUri = uri;
                 icon.setImageURI(uri);
-            }else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE){
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
-                DisplayToast.displayToast(error.getMessage(),context);
+                DisplayToast.displayToast(error.getMessage(), context);
             }
         }
     }

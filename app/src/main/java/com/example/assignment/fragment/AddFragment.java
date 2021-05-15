@@ -102,7 +102,7 @@ public class AddFragment extends Fragment {
                 StorageReference PostImages = FirebaseStorage.getInstance().getReference().child("PostImage").child(title.getText().toString());
                 StorageReference PostCover = FirebaseStorage.getInstance().getReference().child("PostCover").child(title.getText().toString());
                 DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("Posts").child(title.getText().toString());
-                db.setValue(new Post(title.getText().toString(), address.getText().toString(), description.getText().toString(), userID, currentDate));
+                db.setValue(new Post(title.getText().toString(), address.getText().toString(), description.getText().toString(), userID, currentDate,0));
                 StorageReference coverName = PostCover.child("Cover" + coverUri.getLastPathSegment());
                 coverName.putFile(coverUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override

@@ -106,7 +106,7 @@ public class EditProfileFragment extends Fragment {
                             iconName.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
                                 public void onSuccess(Uri uri) {
-                                    db.child("icon").setValue(iconUri.toString());
+                                    db.child("icon").setValue(uri.toString());
                                 }
                             });
                         }
@@ -136,6 +136,7 @@ public class EditProfileFragment extends Fragment {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == Activity.RESULT_OK) {
                 Uri uri = result.getUri();
+                Log.d("uri", uri.toString());
                 iconUri = uri;
                 icon.setImageURI(uri);
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
