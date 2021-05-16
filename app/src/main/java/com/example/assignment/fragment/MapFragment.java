@@ -28,6 +28,7 @@ import androidx.navigation.Navigation;
 
 import com.example.assignment.DisplayToast;
 import com.example.assignment.R;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -36,6 +37,11 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
@@ -44,8 +50,11 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+
+import static android.content.ContentValues.TAG;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
     boolean isPermissionGranted;
@@ -63,15 +72,32 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         View root = inflater.inflate(R.layout.fragment_map, container, false);
         floatingActionButton = root.findViewById(R.id.fab);
-        search = root.findViewById(R.id.mapSearch);
-        searchIcon = root.findViewById(R.id.map_searchIcon);
+        Places.initialize(getActivity().getApplicationContext(), "AIzaSyD8ALr6VkhroXYPksADeBP9GoXUgNZOPTI");
+
+        // Create a new PlacesClient instance
+        PlacesClient placesClient = Places.createClient(getContext());
+
+        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
+                this.getChildFragmentManager().findFragmentById(R.id.autocomplete_fragment);
+        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(@NonNull Place place) {
+                // TODO: Get info about the selected place.
+                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
+            }
 
 
+            @Override
+            public void onError(@NonNull Status status) {
+                // TODO: Handle the error.
+                Log.i(TAG, "An error occurred: " + status);
+            }
+        });
         checkMyPermission();
         initMap();
         client = new FusedLocationProviderClient(this.getActivity());
 
-        searchIcon.setOnClickListener(this::geoLocate);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,31 +109,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             SupportMapFragment supportMapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.mapView);
             supportMapFragment.getMapAsync(this);
         }
-
-        try {
-            linkToSearch = getArguments().getString("address");
-            if (!linkToSearch.equals("")) {
-                linkLocate(linkToSearch);
-            }
-        } catch (Exception e) {
-        }
-
         return root;
-    }
-
-
-    private void linkLocate(String text) {
-        Geocoder geocoder = new Geocoder(this.getContext(), Locale.getDefault());
-        try {
-            List<Address> addressList = geocoder.getFromLocationName(text, 1);
-            if (addressList.size() > 0) {
-                Address address = addressList.get(0);
-                gotoLocation(address.getLatitude(), address.getLongitude());
-                mGoogleMap.addMarker(new MarkerOptions().position(new LatLng(address.getLatitude(), address.getLongitude())));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     private void geoLocate(View view) {
