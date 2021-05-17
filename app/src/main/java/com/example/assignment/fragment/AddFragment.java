@@ -19,8 +19,8 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import com.example.assignment.DisplayToast;
-import com.example.assignment.LoginSession;
+import com.example.assignment.service.DisplayToast;
+import com.example.assignment.service.LoginSession;
 import com.example.assignment.R;
 import com.example.assignment.model.Post;
 import com.google.android.gms.tasks.OnSuccessListener;

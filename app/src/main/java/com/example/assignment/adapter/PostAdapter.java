@@ -3,8 +3,6 @@ package com.example.assignment.adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
-import android.text.Layout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,7 +17,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.assignment.LoginSession;
+import com.example.assignment.service.LoginSession;
 import com.example.assignment.model.Post;
 import com.example.assignment.model.User;
 import com.example.assignment.R;
@@ -29,6 +27,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
@@ -128,6 +127,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             Long totalLikes = (Long) dataSnapshot.getValue();
                             liked.setValue(totalLikes + 1);
+                            addNotification(post.getAuthor(), post.getTitle());
                         }
 
                         @Override
@@ -135,7 +135,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
                         }
                     });
-                } else {
+                } else if ((holder.like.getText().toString().equals("Liked"))) {
                     FirebaseDatabase.getInstance().getReference().child("Like").child(post.getTitle())
                             .child("liked").child(LoginSession.getUserID(context)).removeValue();
                     liked.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -144,6 +144,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                             Long totalLikes = (Long) dataSnapshot.getValue();
                             liked.setValue(totalLikes - 1);
                         }
+
                         @Override
                         public void onCancelled(DatabaseError databaseError) {
 
@@ -152,6 +153,18 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 }
             }
         });
+    }
+
+
+    private void addNotification(String userid, String postTitle) {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Notifications").child(userid);
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("userid", LoginSession.getUserID(context));
+        hashMap.put("text", "like your post");
+        hashMap.put("postTitle", postTitle);
+        reference.push().setValue(hashMap);
+
+
     }
 
     private void isLiked(String postTitle, Button button) {

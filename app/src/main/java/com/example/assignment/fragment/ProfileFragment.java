@@ -1,12 +1,10 @@
 package com.example.assignment.fragment;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,9 +16,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.assignment.LoginSession;
+import com.example.assignment.service.LoginSession;
 import com.example.assignment.R;
-import com.example.assignment.adapter.PostAdapter;
 import com.example.assignment.adapter.UserPostAdapter;
 import com.example.assignment.model.Post;
 import com.google.firebase.database.DataSnapshot;
