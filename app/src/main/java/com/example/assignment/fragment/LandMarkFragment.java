@@ -65,6 +65,7 @@ public class LandMarkFragment extends Fragment {
     private String[] REQUIRED_PERMISSIONS = new String[]{"android.permission.CAMERA", "android.permission.WRITE_EXTERNAL_STORAGE"};
     TextureView textureView;
     ImageButton button;
+    TextView test;
     private FirebaseFunctions mFunctions;
 
     @Override
@@ -79,6 +80,7 @@ public class LandMarkFragment extends Fragment {
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_land_mark, container, false);
         textureView = root.findViewById(R.id.viewFinder);
+        test = root.findViewById(R.id.test);
         button = root.findViewById(R.id.camera_capture_button);
         if (allPermissionGranted()) {
             starCamera();
@@ -142,8 +144,8 @@ public class LandMarkFragment extends Fragment {
                                         @Override
                                         public void onComplete(@NonNull Task<JsonElement> task) {
                                             if (!task.isSuccessful()) {
-                                                // Task failed with an exception
-                                                // ...
+                                                test.setText(String.valueOf(Uri.fromFile(file)));
+
                                             } else {
                                                 for (JsonElement label : task.getResult().getAsJsonArray().get(0).getAsJsonObject().get("landmarkAnnotations").getAsJsonArray()) {
                                                     JsonObject labelObj = label.getAsJsonObject();
@@ -157,22 +159,25 @@ public class LandMarkFragment extends Fragment {
                                                         JsonObject latLng = loc.getAsJsonObject().get("latLng").getAsJsonObject();
                                                         double latitude = latLng.get("latitude").getAsDouble();
                                                         double longitude = latLng.get("longitude").getAsDouble();
-                                                        Log.d("LandMark", String.valueOf(latitude + longitude));
                                                     }
                                                 }
+
                                             }
                                         }
                                     });
 
                         } catch (IOException e) {
                             e.printStackTrace();
+                            test.setText("IOException");
+
                         }
                     }
 
                     @Override
                     public void onError(@NonNull ImageCapture.UseCaseError useCaseError, @NonNull String message, @Nullable Throwable cause) {
                         if (cause != null) {
-                            Log.d("LandMark", "on99");
+                            test.setText("on99");
+
                         }
                     }
                 });
