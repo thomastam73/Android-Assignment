@@ -110,7 +110,6 @@ public class Login extends AppCompatActivity {
             @Override
             public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
-                FirebaseInstanceIdService.onTokenRefresh();
                 startActivity(new Intent(Login.this, MainActivity.class));
                 DisplayToast.displayToast("Hello, " + LoginSession.getUserEmail(context), context);
                 finish();

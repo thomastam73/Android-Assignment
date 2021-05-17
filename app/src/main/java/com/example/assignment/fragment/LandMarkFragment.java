@@ -80,7 +80,7 @@ public class LandMarkFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
     }
 
     @Override
@@ -153,11 +153,11 @@ public class LandMarkFragment extends Fragment {
                                     .addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
-                                            // Task failed with an exception
-                                            // ...
+                                            test.setText("fuck");
                                         }
                                     });
                         } catch (IOException e) {
+                            test.setText("io");
                             e.printStackTrace();
                         }
                     }
