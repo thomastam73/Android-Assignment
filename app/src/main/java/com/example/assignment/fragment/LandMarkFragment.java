@@ -157,10 +157,6 @@ public class LandMarkFragment extends Fragment {
                                                     bundle.putDouble("latitude", latitude);
                                                     bundle.putDouble("longitude", longitude);
                                                 }
-                                                final NavController navController = Navigation.findNavController(v);
-                                                bundle.putString("landmarkName", landmarkName);
-
-                                                navController.navigate(R.id.action_navigation_land_mark_to_navigation_land_mark_detail, bundle);
                                             }
                                         }
                                     })
