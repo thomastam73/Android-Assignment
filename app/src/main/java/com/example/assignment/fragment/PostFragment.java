@@ -3,18 +3,16 @@ package com.example.assignment.fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.assignment.service.LoginSession;
 import com.example.assignment.R;
 import com.example.assignment.adapter.PostAdapter;
 import com.example.assignment.model.Post;
@@ -56,10 +54,11 @@ public class PostFragment extends Fragment {
         postList = new ArrayList<>();
         postAdapter = new PostAdapter(getContext(), postList);
         recyclerView.setAdapter(postAdapter);
-        readPost();
+        readPost(view);
     }
 
-    public void readPost() {
+
+    public void readPost(View view) {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         reference.child("Posts").addValueEventListener(new ValueEventListener() {
             @Override
@@ -67,7 +66,27 @@ public class PostFragment extends Fragment {
                 postList.clear();
                 for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                     Post post = snapshot1.getValue(Post.class);
-                    postList.add(post);
+                        DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                                .child("Follow").child(LoginSession.getUserID(view.getContext())).child("following");
+                        reference.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+                                    if (snapshot1.getKey().equals(post.getAuthor())) {
+                                        Log.d("asd",snapshot1.getKey().toString());
+                                        postList.add(post);
+                                    }
+                                }
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+
+
+
+
                 }
                 postAdapter.notifyDataSetChanged();
             }

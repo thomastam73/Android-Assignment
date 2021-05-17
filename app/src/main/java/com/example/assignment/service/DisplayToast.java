@@ -1,4 +1,4 @@
-package com.example.assignment;
+package com.example.assignment.service;
 
 import android.content.Context;
 import android.view.Gravity;
@@ -9,6 +9,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
+
+import com.example.assignment.R;
 
 public class DisplayToast {
     public DisplayToast() {

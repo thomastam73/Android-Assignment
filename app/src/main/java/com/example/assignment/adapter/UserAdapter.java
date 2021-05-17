@@ -1,9 +1,7 @@
 package com.example.assignment.adapter;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,23 +10,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.assignment.LoginSession;
-import com.example.assignment.model.Post;
+import com.example.assignment.service.LoginSession;
 import com.example.assignment.model.User;
 import com.example.assignment.R;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
@@ -66,6 +61,15 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             email = itemView.findViewById(R.id.search_user_email);
             follow = itemView.findViewById(R.id.btn_follow);
         }
+    }
+
+    private void addNotification(String userid) {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Notifications").child(userid);
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("userid", LoginSession.getUserID(context));
+        hashMap.put("text", "is following you");
+        hashMap.put("postTitle", "");
+        reference.push().setValue(hashMap);
     }
 
     private void isFollowing(String userId, Button button) {
@@ -144,6 +148,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
                         }
                     });
+                    addNotification(user.getId());
                 } else {
                     FirebaseDatabase.getInstance().getReference().child("Follow").child(LoginSession.getUserID(context))
                             .child("following").child(user.getId()).removeValue();
