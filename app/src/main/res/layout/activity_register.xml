@@ -22,7 +22,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Register"
+                android:text="@string/register"
                 android:textSize="30dp" />
 
             <TableRow
@@ -72,7 +72,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ems="20"
-                    android:hint="Password"
+                    android:hint="@string/password"
                     android:inputType="textPassword" />
 
             </TableRow>
@@ -88,7 +88,7 @@
                     android:layout_width="299dp"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:hint="Repeat Password"
+                    android:hint="@string/repeat_password"
                     android:inputType="textPassword" />
 
             </TableRow>
@@ -99,10 +99,11 @@
                 android:gravity="center">
 
                 <Button
+                    android:background="@drawable/btn_like_style"
                     android:id="@+id/register_submit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Submit" />
+                    android:text="@string/submit" />
 
 
             </TableRow>

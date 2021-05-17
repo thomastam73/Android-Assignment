@@ -42,7 +42,7 @@
                 android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Name" />
+                android:text="@string/name" />
 
             <EditText
                 android:id="@+id/EditName"
@@ -55,7 +55,7 @@
                 android:id="@+id/textView2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Age" />
+                android:text="@string/age" />
 
             <EditText
                 android:id="@+id/EditAge"
@@ -68,7 +68,7 @@
                 android:id="@+id/textView3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Description" />
+                android:text="@string/description" />
 
             <MultiAutoCompleteTextView
                 android:id="@+id/EditDescription"
@@ -81,7 +81,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/btn_like_style"
-                android:text="Submit"
+                android:text="@string/submit"
                 app:backgroundTint="@color/gold" />
 
         </LinearLayout>
