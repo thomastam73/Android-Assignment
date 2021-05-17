@@ -87,7 +87,6 @@ public class Login extends AppCompatActivity {
         BiometricManager biometricManager = BiometricManager.from(this);
         switch (biometricManager.canAuthenticate()) {
             case BiometricManager.BIOMETRIC_SUCCESS:
-                DisplayToast.displayToast("Have finger print", this);
                 break;
             case BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE:
                 DisplayToast.displayToast("Sensor not available", this);

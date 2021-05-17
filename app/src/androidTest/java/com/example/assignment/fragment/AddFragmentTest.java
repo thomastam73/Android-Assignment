@@ -30,7 +30,6 @@ public class AddFragmentTest {
         RelativeLayout relativeLayout = (RelativeLayout) test.findViewById(R.id.test_container);
         assertNotNull(relativeLayout);
         AddFragment fragment = new AddFragment();
-        test.getFragmentManager().beginTransaction().add(relativeLayout.getId(),fragment).commitAllowingStateLoss();
 
 
     }

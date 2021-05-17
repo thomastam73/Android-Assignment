@@ -76,39 +76,48 @@ public class Register extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAuth.createUserWithEmailAndPassword(email.getText().toString(), password.getText().toString()).addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            db.child(mAuth.getUid()).setValue(new User(mAuth.getUid(), "", "", email.getText().toString(), "", 0, 0, 0));
-                            StorageReference UserIcon = FirebaseStorage.getInstance().getReference().child("Icon").child(mAuth.getUid());
-                            if (iconUri != null) {
-                                coverName = UserIcon.child("IconImage" + iconUri.getLastPathSegment());
-                                coverName.putFile(iconUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                    @Override
-                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                        coverName.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                            @Override
-                                            public void onSuccess(Uri uri) {
-                                                String url = String.valueOf(uri);
-                                                IconSaveToDB(url, db);
-                                            }
-                                        });
-                                    }
-                                });
+                if (checkPassword()) {
+                    mAuth.createUserWithEmailAndPassword(email.getText().toString(), password.getText().toString()).addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                db.child(mAuth.getUid()).setValue(new User(mAuth.getUid(), "", "", email.getText().toString(), "", 0, 0, 0));
+                                StorageReference UserIcon = FirebaseStorage.getInstance().getReference().child("Icon").child(mAuth.getUid());
+                                if (iconUri != null) {
+                                    coverName = UserIcon.child("IconImage" + iconUri.getLastPathSegment());
+                                    coverName.putFile(iconUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                        @Override
+                                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                            coverName.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                @Override
+                                                public void onSuccess(Uri uri) {
+                                                    String url = String.valueOf(uri);
+                                                    IconSaveToDB(url, db);
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
+                                Intent intent = new Intent();
+                                intent.setClass(Register.this, Login.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                                startActivity(intent);
+                                DisplayToast.displayToast("Success", context);
+                            } else {
+                                DisplayToast.displayToast("Register fail", context);
                             }
-                            Intent intent = new Intent();
-                            intent.setClass(Register.this, Login.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                            startActivity(intent);
-                            DisplayToast.displayToast("Success", context);
-                        } else {
-                            DisplayToast.displayToast("Register fail", context);
                         }
-                    }
-                });
+                    });
+                } else {
+                    DisplayToast.displayToast(getResources().getString(R.string.invalid_password), context);
+                }
+
             }
         });
+    }
+
+    public boolean checkPassword() {
+        return password.getText().toString().equals(repeatPassword.getText().toString());
     }
 
     private void IconSaveToDB(String url, DatabaseReference db) {
@@ -143,4 +152,5 @@ public class Register extends AppCompatActivity {
             }
         }
     }
+
 }

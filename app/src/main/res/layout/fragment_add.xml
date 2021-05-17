@@ -50,28 +50,28 @@
                         android:id="@+id/AddPostTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Title" />
+                        android:text="@string/title" />
 
                     <EditText
                         android:id="@+id/AddPostTitleText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ems="10"
-                        android:hint="Title"
+                        android:hint="@string/title"
                         android:inputType="textPersonName" />
 
                     <TextView
                         android:id="@+id/AddPostAddress"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Address" />
+                        android:text="@string/address" />
 
                     <EditText
                         android:id="@+id/AddPostAddressText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ems="10"
-                        android:hint="Address"
+                        android:hint="@string/address"
                         android:inputType="textPersonName" />
                 </LinearLayout>
 
@@ -83,7 +83,7 @@
                 android:layout_height="171dp"
                 android:ems="10"
                 android:gravity="start|top"
-                android:hint="Description"
+                android:hint="@string/description"
                 android:inputType="textMultiLine" />
 
             <Button
@@ -91,7 +91,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/btn_like_style"
-                android:text="Submit"
+                android:text="@string/submit"
                 app:backgroundTint="#FFFFFF" />
 
 

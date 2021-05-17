@@ -19,7 +19,7 @@
                 android:id="@+id/login_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Login"
+                android:text="@string/login"
                 android:textSize="30dp"
                 android:gravity="center"/>
 
@@ -34,7 +34,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ems="20"
-                    android:hint="Email"
+                    android:hint="@string/email"
                     android:inputType="textEmailAddress" />
 
             </TableRow>
@@ -50,7 +50,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ems="20"
-                    android:hint="Password"
+                    android:hint="@string/password"
                     android:inputType="textPassword" />
 
             </TableRow>
@@ -64,20 +64,25 @@
                     android:id="@+id/login_submit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Submit" />
+                    android:background="@drawable/btn_like_style"
+                    android:backgroundTint="#FFFFFF"
+                    android:text="@string/submit" />
 
             </TableRow>
 
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center">
+                android:gravity="center"
+                android:layout_marginTop="5dp"
+                >
 
                 <Button
+                    android:background="@drawable/btn_like_style"
                     android:id="@+id/login_register"
-                    android:layout_width="220dp"
-                    android:layout_height="match_parent"
-                    android:text="Register" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/register" />
             </TableRow>
 
             <TableRow
