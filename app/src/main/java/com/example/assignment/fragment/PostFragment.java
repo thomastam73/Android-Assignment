@@ -1,14 +1,18 @@
 package com.example.assignment.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -54,11 +58,14 @@ public class PostFragment extends Fragment {
         postList = new ArrayList<>();
         postAdapter = new PostAdapter(getContext(), postList);
         recyclerView.setAdapter(postAdapter);
-        readPost(view);
+        readPost(getContext());
+
+
     }
 
 
-    public void readPost(View view) {
+
+    public void readPost(Context context) {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         reference.child("Posts").addValueEventListener(new ValueEventListener() {
             @Override
@@ -67,13 +74,12 @@ public class PostFragment extends Fragment {
                 for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                     Post post = snapshot1.getValue(Post.class);
                         DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
-                                .child("Follow").child(LoginSession.getUserID(view.getContext())).child("following");
+                                .child("Follow").child(LoginSession.getUserID(context)).child("following");
                         reference.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                                     if (snapshot1.getKey().equals(post.getAuthor())) {
-                                        Log.d("asd",snapshot1.getKey().toString());
                                         postList.add(post);
                                     }
                                 }

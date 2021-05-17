@@ -43,7 +43,8 @@
     <fragment
         android:id="@+id/navigation_land_mark"
         android:name="com.example.assignment.fragment.LandMarkFragment"
-        tools:layout="@layout/fragment_land_mark" />
+        tools:layout="@layout/fragment_land_mark" >
+    </fragment>
 
 
     <fragment
