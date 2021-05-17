@@ -127,49 +127,6 @@ public class LandMarkFragment extends Fragment {
                     public void onImageSaved(@NonNull File file) {
                         FirebaseVisionImage image;
                         try {
-<<<<<<< Updated upstream
-                            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), Uri.fromFile(file));
-                            bitmap = scaleBitmapDown(bitmap, 640);
-                            // Convert bitmap to base64 encoded string
-                            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-                            byte[] imageBytes = byteArrayOutputStream.toByteArray();
-                            String base64encoded = Base64.encodeToString(imageBytes, Base64.NO_WRAP);
-                            mFunctions = FirebaseFunctions.getInstance();
-                            // Create json request to cloud vision
-                            JsonObject request = new JsonObject();
-                            // Add image to request
-                            JsonObject image = new JsonObject();
-                            image.add("content", new JsonPrimitive(base64encoded));
-                            request.add("image", image);
-                            //Add features to the request
-                            JsonObject feature = new JsonObject();
-                            feature.add("maxResults", new JsonPrimitive(5));
-                            feature.add("type", new JsonPrimitive("LANDMARK_DETECTION"));
-                            JsonArray features = new JsonArray();
-                            features.add(feature);
-                            request.add("features", features);
-                            annotateImage(request.toString())
-                                    .addOnCompleteListener(new OnCompleteListener<JsonElement>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<JsonElement> task) {
-                                            if (!task.isSuccessful()) {
-                                                test.setText(String.valueOf(Uri.fromFile(file)));
-                                            } else {
-                                                for (JsonElement label : task.getResult().getAsJsonArray().get(0).getAsJsonObject().get("landmarkAnnotations").getAsJsonArray()) {
-                                                    JsonObject labelObj = label.getAsJsonObject();
-                                                    String landmarkName = labelObj.get("description").getAsString();
-                                                    String entityId = labelObj.get("mid").getAsString();
-                                                    float score = labelObj.get("score").getAsFloat();
-                                                    JsonObject bounds = labelObj.get("boundingPoly").getAsJsonObject();
-                                                    // Multiple locations are possible, e.g., the location of the depicted
-                                                    // landmark and the location the picture was taken.
-                                                    for (JsonElement loc : labelObj.get("locations").getAsJsonArray()) {
-                                                        JsonObject latLng = loc.getAsJsonObject().get("latLng").getAsJsonObject();
-                                                        double latitude = latLng.get("latitude").getAsDouble();
-                                                        double longitude = latLng.get("longitude").getAsDouble();
-                                                    }
-=======
                             image = FirebaseVisionImage.fromFilePath(getContext(), Uri.fromFile(file));
                             FirebaseVisionCloudLandmarkDetector detector = FirebaseVision.getInstance()
                                     .getVisionCloudLandmarkDetector();
@@ -184,12 +141,10 @@ public class LandMarkFragment extends Fragment {
                                                 String entityId = landmark.getEntityId();
                                                 float confidence = landmark.getConfidence();
 
-                                                // Multiple locations are possible, e.g., the location of the depicted
-                                                // landmark and the location the picture was taken.
+
                                                 for (FirebaseVisionLatLng loc : landmark.getLocations()) {
                                                     double latitude = loc.getLatitude();
                                                     double longitude = loc.getLongitude();
->>>>>>> Stashed changes
                                                 }
                                                 test.setText("success");
                                             }
