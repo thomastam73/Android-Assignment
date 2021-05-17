@@ -20,6 +20,8 @@ import androidx.camera.core.PreviewConfig;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -27,6 +29,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.util.Rational;
 import android.util.Size;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.TextureView;
@@ -36,6 +39,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.assignment.R;
+import com.example.assignment.service.DisplayToast;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -74,7 +78,6 @@ public class LandMarkFragment extends Fragment {
     private String[] REQUIRED_PERMISSIONS = new String[]{"android.permission.CAMERA", "android.permission.WRITE_EXTERNAL_STORAGE"};
     TextureView textureView;
     ImageButton button;
-    TextView test;
     private FirebaseFunctions mFunctions;
 
     @Override
@@ -84,11 +87,16 @@ public class LandMarkFragment extends Fragment {
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ((AppCompatActivity)getActivity()).getSupportActionBar().show();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_land_mark, container, false);
         textureView = root.findViewById(R.id.viewFinder);
-        test = root.findViewById(R.id.test);
         button = root.findViewById(R.id.camera_capture_button);
         if (allPermissionGranted()) {
             starCamera();
@@ -135,6 +143,7 @@ public class LandMarkFragment extends Fragment {
                                         @Override
                                         public void onSuccess(List<FirebaseVisionCloudLandmark> firebaseVisionCloudLandmarks) {
                                             for (FirebaseVisionCloudLandmark landmark : firebaseVisionCloudLandmarks) {
+                                                Bundle bundle = new Bundle();
 
                                                 Rect bounds = landmark.getBoundingBox();
                                                 String landmarkName = landmark.getLandmark();
@@ -145,19 +154,23 @@ public class LandMarkFragment extends Fragment {
                                                 for (FirebaseVisionLatLng loc : landmark.getLocations()) {
                                                     double latitude = loc.getLatitude();
                                                     double longitude = loc.getLongitude();
+                                                    bundle.putDouble("latitude", latitude);
+                                                    bundle.putDouble("longitude", longitude);
                                                 }
-                                                test.setText("success");
+                                                final NavController navController = Navigation.findNavController(v);
+                                                bundle.putString("landmarkName", landmarkName);
+
+                                                navController.navigate(R.id.action_navigation_land_mark_to_navigation_land_mark_detail, bundle);
                                             }
                                         }
                                     })
                                     .addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
-                                            test.setText("fuck");
+                                            DisplayToast.displayToast("Sorry, can't find this place.",getContext());
                                         }
                                     });
                         } catch (IOException e) {
-                            test.setText("io");
                             e.printStackTrace();
                         }
                     }
@@ -165,7 +178,6 @@ public class LandMarkFragment extends Fragment {
                     @Override
                     public void onError(@NonNull ImageCapture.UseCaseError useCaseError, @NonNull String message, @Nullable Throwable cause) {
                         if (cause != null) {
-                            test.setText("on99");
 
                         }
                     }

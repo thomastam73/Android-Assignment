@@ -5,7 +5,10 @@
     android:id="@+id/mobile_navigation"
     app:startDestination="@+id/navigation_post">
 
-
+    <fragment
+        android:id="@+id/navigation_land_mark_detail"
+        android:name="com.example.assignment.fragment.LandMarkInfFragment"
+        tools:layout="@layout/fragment_land_mark_inf"/>
 
     <fragment
         android:id="@+id/navigation_post"
@@ -43,7 +46,11 @@
     <fragment
         android:id="@+id/navigation_land_mark"
         android:name="com.example.assignment.fragment.LandMarkFragment"
-        tools:layout="@layout/fragment_land_mark" />
+        tools:layout="@layout/fragment_land_mark" >
+        <action
+            android:id="@+id/action_navigation_land_mark_to_navigation_land_mark_detail"
+            app:destination="@id/navigation_land_mark_detail" />
+    </fragment>
 
 
     <fragment
