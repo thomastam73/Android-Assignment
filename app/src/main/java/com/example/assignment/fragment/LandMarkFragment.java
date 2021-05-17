@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Camera;
 import android.graphics.Matrix;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -38,6 +39,8 @@ import com.example.assignment.R;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
@@ -46,6 +49,11 @@ import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.firebase.functions.FirebaseFunctions;
 import com.google.firebase.functions.HttpsCallableResult;
+import com.google.firebase.ml.vision.FirebaseVision;
+import com.google.firebase.ml.vision.cloud.landmark.FirebaseVisionCloudLandmark;
+import com.google.firebase.ml.vision.cloud.landmark.FirebaseVisionCloudLandmarkDetector;
+import com.google.firebase.ml.vision.common.FirebaseVisionImage;
+import com.google.firebase.ml.vision.common.FirebaseVisionLatLng;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -57,6 +65,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 import static android.content.ContentValues.TAG;
 
@@ -117,7 +126,9 @@ public class LandMarkFragment extends Fragment {
                 imageCapture.takePicture(file, new ImageCapture.OnImageSavedListener() {
                     @Override
                     public void onImageSaved(@NonNull File file) {
+                        FirebaseVisionImage image;
                         try {
+<<<<<<< Updated upstream
                             Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), Uri.fromFile(file));
                             bitmap = scaleBitmapDown(bitmap, 640);
                             // Convert bitmap to base64 encoded string
@@ -159,16 +170,41 @@ public class LandMarkFragment extends Fragment {
                                                         double latitude = latLng.get("latitude").getAsDouble();
                                                         double longitude = latLng.get("longitude").getAsDouble();
                                                     }
-                                                }
+=======
+                            image = FirebaseVisionImage.fromFilePath(getContext(), Uri.fromFile(file));
+                            FirebaseVisionCloudLandmarkDetector detector = FirebaseVision.getInstance()
+                                    .getVisionCloudLandmarkDetector();
+                            Task<List<FirebaseVisionCloudLandmark>> result = detector.detectInImage(image)
+                                    .addOnSuccessListener(new OnSuccessListener<List<FirebaseVisionCloudLandmark>>() {
+                                        @Override
+                                        public void onSuccess(List<FirebaseVisionCloudLandmark> firebaseVisionCloudLandmarks) {
+                                            for (FirebaseVisionCloudLandmark landmark : firebaseVisionCloudLandmarks) {
 
+                                                Rect bounds = landmark.getBoundingBox();
+                                                String landmarkName = landmark.getLandmark();
+                                                String entityId = landmark.getEntityId();
+                                                float confidence = landmark.getConfidence();
+
+                                                // Multiple locations are possible, e.g., the location of the depicted
+                                                // landmark and the location the picture was taken.
+                                                for (FirebaseVisionLatLng loc : landmark.getLocations()) {
+                                                    double latitude = loc.getLatitude();
+                                                    double longitude = loc.getLongitude();
+>>>>>>> Stashed changes
+                                                }
+                                                test.setText("success");
                                             }
                                         }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            // Task failed with an exception
+                                            // ...
+                                        }
                                     });
-
                         } catch (IOException e) {
                             e.printStackTrace();
-                            test.setText("IOException");
-
                         }
                     }
 
@@ -185,39 +221,6 @@ public class LandMarkFragment extends Fragment {
         CameraX.bindToLifecycle(this, preview, imageCapture);
     }
 
-    private Task<JsonElement> annotateImage(String requestJson) {
-        return mFunctions
-                .getHttpsCallable("annotateImage")
-                .call(requestJson)
-                .continueWith(new Continuation<HttpsCallableResult, JsonElement>() {
-                    @Override
-                    public JsonElement then(@NonNull Task<HttpsCallableResult> task) {
-                        // This continuation runs on either success or failure, but if the task
-                        // has failed then getResult() will throw an Exception which will be
-                        // propagated down.
-                        return JsonParser.parseString(new Gson().toJson(task.getResult().getData()));
-                    }
-                });
-    }
-
-    private Bitmap scaleBitmapDown(Bitmap bitmap, int maxDimension) {
-        int originalWidth = bitmap.getWidth();
-        int originalHeight = bitmap.getHeight();
-        int resizedWidth = maxDimension;
-        int resizedHeight = maxDimension;
-
-        if (originalHeight > originalWidth) {
-            resizedHeight = maxDimension;
-            resizedWidth = (int) (resizedHeight * (float) originalWidth / (float) originalHeight);
-        } else if (originalWidth > originalHeight) {
-            resizedWidth = maxDimension;
-            resizedHeight = (int) (resizedWidth * (float) originalHeight / (float) originalWidth);
-        } else if (originalHeight == originalWidth) {
-            resizedHeight = maxDimension;
-            resizedWidth = maxDimension;
-        }
-        return Bitmap.createScaledBitmap(bitmap, resizedWidth, resizedHeight, false);
-    }
 
     private void updateTransform() {
         Matrix matrix = new Matrix();
