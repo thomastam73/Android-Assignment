@@ -126,13 +126,13 @@ public class LandMarkFragment extends Fragment {
                             byte[] imageBytes = byteArrayOutputStream.toByteArray();
                             String base64encoded = Base64.encodeToString(imageBytes, Base64.NO_WRAP);
                             mFunctions = FirebaseFunctions.getInstance();
-// Create json request to cloud vision
+                            // Create json request to cloud vision
                             JsonObject request = new JsonObject();
-// Add image to request
+                            // Add image to request
                             JsonObject image = new JsonObject();
                             image.add("content", new JsonPrimitive(base64encoded));
                             request.add("image", image);
-//Add features to the request
+                            //Add features to the request
                             JsonObject feature = new JsonObject();
                             feature.add("maxResults", new JsonPrimitive(5));
                             feature.add("type", new JsonPrimitive("LANDMARK_DETECTION"));
@@ -145,7 +145,6 @@ public class LandMarkFragment extends Fragment {
                                         public void onComplete(@NonNull Task<JsonElement> task) {
                                             if (!task.isSuccessful()) {
                                                 test.setText(String.valueOf(Uri.fromFile(file)));
-
                                             } else {
                                                 for (JsonElement label : task.getResult().getAsJsonArray().get(0).getAsJsonObject().get("landmarkAnnotations").getAsJsonArray()) {
                                                     JsonObject labelObj = label.getAsJsonObject();
