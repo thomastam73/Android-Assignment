@@ -2,8 +2,10 @@ package com.example.assignment.fragment;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Camera;
 import android.graphics.Matrix;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -18,6 +20,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.util.Rational;
 import android.util.Size;
@@ -31,13 +36,26 @@ import android.widget.TextView;
 
 import com.example.assignment.R;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.firebase.functions.FirebaseFunctions;
+import com.google.firebase.functions.HttpsCallableResult;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 
 import static android.content.ContentValues.TAG;
@@ -47,11 +65,12 @@ public class LandMarkFragment extends Fragment {
     private String[] REQUIRED_PERMISSIONS = new String[]{"android.permission.CAMERA", "android.permission.WRITE_EXTERNAL_STORAGE"};
     TextureView textureView;
     ImageButton button;
+    private FirebaseFunctions mFunctions;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
+        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
 
     }
 
@@ -91,23 +110,109 @@ public class LandMarkFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                File file = new File("sdcard/photos/DCIM(0)/Camera/CameraX_" + System.currentTimeMillis());
+                File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+                File file = new File(path, System.currentTimeMillis() + ".jpg");
                 imageCapture.takePicture(file, new ImageCapture.OnImageSavedListener() {
                     @Override
                     public void onImageSaved(@NonNull File file) {
-                        Log.d("ASDSD","good");
+                        try {
+                            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), Uri.fromFile(file));
+                            bitmap = scaleBitmapDown(bitmap, 640);
+                            // Convert bitmap to base64 encoded string
+                            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+                            byte[] imageBytes = byteArrayOutputStream.toByteArray();
+                            String base64encoded = Base64.encodeToString(imageBytes, Base64.NO_WRAP);
+                            mFunctions = FirebaseFunctions.getInstance();
+// Create json request to cloud vision
+                            JsonObject request = new JsonObject();
+// Add image to request
+                            JsonObject image = new JsonObject();
+                            image.add("content", new JsonPrimitive(base64encoded));
+                            request.add("image", image);
+//Add features to the request
+                            JsonObject feature = new JsonObject();
+                            feature.add("maxResults", new JsonPrimitive(5));
+                            feature.add("type", new JsonPrimitive("LANDMARK_DETECTION"));
+                            JsonArray features = new JsonArray();
+                            features.add(feature);
+                            request.add("features", features);
+                            annotateImage(request.toString())
+                                    .addOnCompleteListener(new OnCompleteListener<JsonElement>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<JsonElement> task) {
+                                            if (!task.isSuccessful()) {
+                                                // Task failed with an exception
+                                                // ...
+                                            } else {
+                                                for (JsonElement label : task.getResult().getAsJsonArray().get(0).getAsJsonObject().get("landmarkAnnotations").getAsJsonArray()) {
+                                                    JsonObject labelObj = label.getAsJsonObject();
+                                                    String landmarkName = labelObj.get("description").getAsString();
+                                                    String entityId = labelObj.get("mid").getAsString();
+                                                    float score = labelObj.get("score").getAsFloat();
+                                                    JsonObject bounds = labelObj.get("boundingPoly").getAsJsonObject();
+                                                    // Multiple locations are possible, e.g., the location of the depicted
+                                                    // landmark and the location the picture was taken.
+                                                    for (JsonElement loc : labelObj.get("locations").getAsJsonArray()) {
+                                                        JsonObject latLng = loc.getAsJsonObject().get("latLng").getAsJsonObject();
+                                                        double latitude = latLng.get("latitude").getAsDouble();
+                                                        double longitude = latLng.get("longitude").getAsDouble();
+                                                        Log.d("LandMark", String.valueOf(latitude + longitude));
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    });
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
 
                     @Override
                     public void onError(@NonNull ImageCapture.UseCaseError useCaseError, @NonNull String message, @Nullable Throwable cause) {
                         if (cause != null) {
-                            cause.printStackTrace();
+                            Log.d("LandMark", "on99");
                         }
                     }
                 });
             }
         });
-        CameraX.bindToLifecycle(this,preview,imageCapture);
+        CameraX.bindToLifecycle(this, preview, imageCapture);
+    }
+
+    private Task<JsonElement> annotateImage(String requestJson) {
+        return mFunctions
+                .getHttpsCallable("annotateImage")
+                .call(requestJson)
+                .continueWith(new Continuation<HttpsCallableResult, JsonElement>() {
+                    @Override
+                    public JsonElement then(@NonNull Task<HttpsCallableResult> task) {
+                        // This continuation runs on either success or failure, but if the task
+                        // has failed then getResult() will throw an Exception which will be
+                        // propagated down.
+                        return JsonParser.parseString(new Gson().toJson(task.getResult().getData()));
+                    }
+                });
+    }
+
+    private Bitmap scaleBitmapDown(Bitmap bitmap, int maxDimension) {
+        int originalWidth = bitmap.getWidth();
+        int originalHeight = bitmap.getHeight();
+        int resizedWidth = maxDimension;
+        int resizedHeight = maxDimension;
+
+        if (originalHeight > originalWidth) {
+            resizedHeight = maxDimension;
+            resizedWidth = (int) (resizedHeight * (float) originalWidth / (float) originalHeight);
+        } else if (originalWidth > originalHeight) {
+            resizedWidth = maxDimension;
+            resizedHeight = (int) (resizedWidth * (float) originalHeight / (float) originalWidth);
+        } else if (originalHeight == originalWidth) {
+            resizedHeight = maxDimension;
+            resizedWidth = maxDimension;
+        }
+        return Bitmap.createScaledBitmap(bitmap, resizedWidth, resizedHeight, false);
     }
 
     private void updateTransform() {
