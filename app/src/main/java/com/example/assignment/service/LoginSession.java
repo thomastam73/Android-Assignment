@@ -1,9 +1,11 @@
-package com.example.assignment;
+package com.example.assignment.service;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+
+import com.example.assignment.activity.Login;
 
 public class LoginSession {
     private static final String loginStatus = "status_login",
@@ -43,6 +45,7 @@ public class LoginSession {
     public static String getUserEmail(Context context) {
         return getSharedReferences(context).getString(userEmail, "");
     }
+
 
     public static void clearData(Context context) {
         SharedPreferences.Editor editor = getSharedReferences(context).edit();

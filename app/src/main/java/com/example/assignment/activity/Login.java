@@ -1,4 +1,4 @@
-package com.example.assignment;
+package com.example.assignment.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,25 +7,23 @@ import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.assignment.MainActivity;
+import com.example.assignment.R;
+import com.example.assignment.service.DisplayToast;
+import com.example.assignment.service.FirebaseInstanceIdService;
+import com.example.assignment.service.LoginSession;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.messaging.FirebaseMessagingService;
 
 import java.util.concurrent.Executor;
 
@@ -112,6 +110,7 @@ public class Login extends AppCompatActivity {
             @Override
             public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
                 super.onAuthenticationSucceeded(result);
+                FirebaseInstanceIdService.onTokenRefresh();
                 startActivity(new Intent(Login.this, MainActivity.class));
                 DisplayToast.displayToast("Hello, " + LoginSession.getUserEmail(context), context);
                 finish();
