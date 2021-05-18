@@ -93,7 +93,9 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 try {
-                    Glide.with(getView()).load(snapshot.child("icon").getValue()).into(profile_icon);
+                    if (!snapshot.child("icon").getValue().toString().equals("")) {
+                        Glide.with(getView()).load(snapshot.child("icon").getValue()).into(profile_icon);
+                    }
                     profile_name.setText(snapshot.child("name").getValue().toString());
                     follower.setText(snapshot.child("follower").getValue().toString());
                     following.setText(snapshot.child("following").getValue().toString());

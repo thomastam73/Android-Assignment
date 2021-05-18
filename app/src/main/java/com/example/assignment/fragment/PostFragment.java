@@ -16,10 +16,13 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.assignment.activity.Login;
 import com.example.assignment.service.LoginSession;
 import com.example.assignment.R;
 import com.example.assignment.adapter.PostAdapter;
 import com.example.assignment.model.Post;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,14 +38,14 @@ public class PostFragment extends Fragment {
     private RecyclerView recyclerView;
     private PostAdapter postAdapter;
     private List<Post> postList;
+    private boolean following;
+    private List<String> followList;
     float x1, x2, y1, y2;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_post, container, false);
-
-
         return root;
     }
 
@@ -60,10 +63,7 @@ public class PostFragment extends Fragment {
         recyclerView.setAdapter(postAdapter);
         readPost(getContext());
 
-
     }
-
-
 
     public void readPost(Context context) {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
@@ -73,26 +73,23 @@ public class PostFragment extends Fragment {
                 postList.clear();
                 for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                     Post post = snapshot1.getValue(Post.class);
-                        DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
-                                .child("Follow").child(LoginSession.getUserID(context)).child("following");
-                        reference.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                for (DataSnapshot snapshot1 : snapshot.getChildren()) {
-                                    if (snapshot1.getKey().equals(post.getAuthor())) {
-                                        postList.add(post);
-                                    }
+                    DatabaseReference reference = FirebaseDatabase.getInstance().getReference()
+                            .child("Follow").child(LoginSession.getUserID(context)).child("following");
+                    reference.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+                                if (snapshot1.getKey().equals(post.getAuthor())) {
+                                    postList.add(post);
                                 }
                             }
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
+                        }
 
-                            }
-                        });
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
 
-
-
-
+                        }
+                    });
                 }
                 postAdapter.notifyDataSetChanged();
             }

@@ -144,7 +144,9 @@ public class EditProfileFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 try {
-                    Glide.with(getView()).load(snapshot.child("icon").getValue()).into(icon);
+                    if (!snapshot.child("icon").getValue().toString().equals("")) {
+                        Glide.with(getView()).load(snapshot.child("icon").getValue()).into(icon);
+                    }
                     icon.getLayoutParams().height = 300;
                     icon.getLayoutParams().width = 300;
                     name.setText(snapshot.child("name").getValue().toString());

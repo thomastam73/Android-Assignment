@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -80,6 +82,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                                 navController.navigate(R.id.action_navigation_post_to_navigation_land_mark);
                             } else if (x1 > x2) {
                                 navController.navigate(R.id.action_navigation_post_to_navigation_search);
+
                             }
                             break;
                     }
@@ -193,7 +196,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User user = snapshot.getValue(User.class);
-                Glide.with(context).load(user.getIcon()).into(user_icon);
+                if (!snapshot.child("icon").getValue().toString().equals("")) {
+                    Glide.with(context).load(user.getIcon()).into(user_icon);
+                }
                 user_icon.getLayoutParams().width = 100;
                 user_icon.getLayoutParams().height = 100;
                 username.setText(user.getName());
