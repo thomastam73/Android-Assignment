@@ -14,13 +14,16 @@
 
         <action
             android:id="@+id/action_navigation_post_to_navigation_detailPost"
-            app:destination="@id/navigation_detailPost" />
+            app:destination="@id/navigation_detailPost"
+            app:enterAnim="@anim/fadein" />
         <action
             android:id="@+id/action_navigation_post_to_navigation_land_mark"
-            app:destination="@id/navigation_land_mark" />
+            app:destination="@id/navigation_land_mark"
+            app:enterAnim="@anim/lefttoright" />
         <action
             android:id="@+id/action_navigation_post_to_navigation_search"
-            app:destination="@id/navigation_search" />
+            app:destination="@id/navigation_search"
+            app:enterAnim="@anim/toright" />
     </fragment>
 
     <fragment
@@ -57,7 +60,8 @@
         tools:layout="@layout/fragment_add">
         <action
             android:id="@+id/action_navigation_add_to_navigation_post"
-            app:destination="@id/navigation_post" />
+            app:destination="@id/navigation_post"
+            app:enterAnim="@anim/zoomin" />
     </fragment>
 
     <fragment
@@ -66,7 +70,8 @@
         tools:layout="@layout/fragment_edit_profile">
         <action
             android:id="@+id/action_navigation_editProfile_to_navigation_profile"
-            app:destination="@id/navigation_profile" />
+            app:destination="@id/navigation_profile"
+            app:enterAnim="@anim/bounce" />
     </fragment>
 
     <fragment
@@ -89,10 +94,12 @@
         tools:layout="@layout/fragment_profile">
         <action
             android:id="@+id/action_navigation_profile_to_navigation_editProfile"
-            app:destination="@id/navigation_editProfile" />
+            app:destination="@id/navigation_editProfile"
+            app:enterAnim="@anim/fadein" />
         <action
             android:id="@+id/action_navigation_profile_to_navigation_detailPost"
-            app:destination="@id/navigation_detailPost" />
+            app:destination="@id/navigation_detailPost"
+            app:enterAnim="@anim/fadein" />
     </fragment>
 
 </navigation>

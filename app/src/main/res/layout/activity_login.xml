@@ -65,7 +65,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/btn_like_style"
-                    android:backgroundTint="#FFFFFF"
+                    android:backgroundTint="@color/gold"
                     android:text="@string/submit" />
 
             </TableRow>
@@ -78,10 +78,11 @@
                 >
 
                 <Button
-                    android:background="@drawable/btn_like_style"
                     android:id="@+id/login_register"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/btn_like_style"
+                    android:backgroundTint="@color/gold"
                     android:text="@string/register" />
             </TableRow>
 

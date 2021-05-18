@@ -99,10 +99,11 @@
                 android:gravity="center">
 
                 <Button
-                    android:background="@drawable/btn_like_style"
                     android:id="@+id/register_submit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/btn_like_style"
+                    android:backgroundTint="#ffd700"
                     android:text="@string/submit" />
 
 

@@ -10,10 +10,20 @@ import com.example.assignment.activity.Login;
 public class LoginSession {
     private static final String loginStatus = "status_login",
             userID = "UserID",
-            userEmail = "UserEmail";
+            userEmail = "UserEmail", userToken = "UserToken";
 
     private static SharedPreferences getSharedReferences(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context);
+    }
+
+    public static void setUserToken(Context context, String token) {
+        SharedPreferences.Editor editor = getSharedReferences(context).edit();
+        editor.putString(userToken, token);
+        editor.apply();
+    }
+
+    public static String getUserToken(Context context) {
+        return getSharedReferences(context).getString(userToken, "");
     }
 
     public static void setDataLogin(Context context, boolean status) {
