@@ -78,6 +78,7 @@ public class LandMarkFragment extends Fragment {
     private String[] REQUIRED_PERMISSIONS = new String[]{"android.permission.CAMERA", "android.permission.WRITE_EXTERNAL_STORAGE"};
     TextureView textureView;
     ImageButton button;
+    String landname;
     private FirebaseFunctions mFunctions;
 
     @Override
@@ -149,7 +150,7 @@ public class LandMarkFragment extends Fragment {
                                                 String landmarkName = landmark.getLandmark();
                                                 String entityId = landmark.getEntityId();
                                                 float confidence = landmark.getConfidence();
-
+                                                landname = landmarkName;
 
                                                 for (FirebaseVisionLatLng loc : landmark.getLocations()) {
                                                     double latitude = loc.getLatitude();
@@ -158,6 +159,7 @@ public class LandMarkFragment extends Fragment {
                                                     bundle.putDouble("longitude", longitude);
                                                 }
                                             }
+                                            DisplayToast.displayToast("It is " + landname,getContext());
                                         }
                                     })
                                     .addOnFailureListener(new OnFailureListener() {

@@ -62,7 +62,6 @@ public class PostFragment extends Fragment {
         postAdapter = new PostAdapter(getContext(), postList);
         recyclerView.setAdapter(postAdapter);
         readPost(getContext());
-
     }
 
     public void readPost(Context context) {

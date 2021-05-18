@@ -38,7 +38,7 @@ public class RegisterTest {
 
     @Test
     public void testLaunchOfSecondActivityOnButtonClick() {
-        onView(withId(R.id.register_edit_email)).perform(typeText("test111111@test.com"));
+        onView(withId(R.id.register_edit_email)).perform(typeText("333333333@test.com"));
         onView(withId(R.id.register_edit_password)).perform(typeText("123456"));
         closeSoftKeyboard();
         onView(withId(R.id.register_edit_repeat_password)).perform(typeText("123456"));
